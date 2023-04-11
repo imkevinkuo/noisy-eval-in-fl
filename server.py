@@ -1,23 +1,7 @@
-
-import argparse
-import os
-import pdb
-import pickle
-import random
 from copy import deepcopy
-from glob import glob
-from heapq import nsmallest
-from itertools import product
-from math import ceil
-from math import log
-from operator import itemgetter
 import numpy as np
 import torch
-from numpy.linalg import norm
-from scipy.special import logsumexp
-from tensorboardX import SummaryWriter
 from torch import optim
-from yaml import YAMLError
 
 def train(model, X, Y, test_batch, batch=32, dropout=0.0, epochs=1, mu=0.0, **kwargs):
     optimizer = torch.optim.SGD(model.parameters(), **kwargs)

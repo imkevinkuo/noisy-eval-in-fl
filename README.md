@@ -1,6 +1,8 @@
 # noisy-eval-in-fl
-Repository to accompany "On Noisy Evaluation in Federated Hyperparameter Tuning". 
-To appear in MLSys2023.
+[![DOI](https://zenodo.org/badge/539070342.svg)](https://zenodo.org/badge/latestdoi/539070342)
+
+Repository to accompany "On Noisy Evaluation in Federated Hyperparameter Tuning". To appear in MLSys2023.
+
 
 ## Setup
 
