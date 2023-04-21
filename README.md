@@ -7,7 +7,7 @@ Repository to accompany "On Noisy Evaluation in Federated Hyperparameter Tuning"
 ## Setup
 
 In a Linux terminal:
-1. Pull this repository by running `git clone https://github.com/imkevinnkuo/noisy-eval-in-fl`.
+1. Pull this repository by running `git clone https://github.com/imkevinkuo/noisy-eval-in-fl`.
 2. Install miniconda3 from https://docs.conda.io/en/latest/miniconda.html.
 3. Set up the conda environment with name `noisyfl`. Run the following command:
 ```conda env create -n noisyfl -f environment.yml```
