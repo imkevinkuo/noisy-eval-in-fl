@@ -17,9 +17,11 @@ In a Linux terminal:
 
 ## Data Preparation
 
-**We provide preprocessed data at** https://drive.google.com/file/d/1iDK5JvEiv3Vz0jNV05cNGKBGbclBwQNu/view?usp=sharing. **Place** `data.tar.gz` **in the project directory and extract the contents with** `tar -xzvf data.tar.gz`. **No other steps are needed.**
+**To directly run analysis, we provide training trace logs at** https://drive.google.com/file/d/1ayvSx1EhIt9-_ImNBGfbVlABa90UYDvs/view?usp=share_link. **Place** `runs.tar.gz` **in the project directory and extract the contents with** `tar -xzvf runs.tar.gz`. 
 
-`notebooks/generate_data.ipynb` contains code to set up the datasets from scratch, but does not need to be run.
+**To run the training scripts, we provide preprocessed data at** https://drive.google.com/file/d/1iDK5JvEiv3Vz0jNV05cNGKBGbclBwQNu/view?usp=share_link. **Place** `data.tar.gz` **in the project directory and extract the contents with** `tar -xzvf data.tar.gz`.
+
+`notebooks/generate_data.ipynb` contains code to set up the datasets from scratch.
 
 ## Model Training
 

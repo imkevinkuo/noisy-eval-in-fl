@@ -54,7 +54,7 @@ def main():
     with open(os.path.join(train_run_dir, 'args.json'), 'w') as f:
         json.dump(vars(args), f, indent=4)
 
-    test_batch, tasks_train, tasks_test, tasks_test_sizes = load_dataset(args.dataset)
+    test_batch, tasks_train, tasks_test = load_dataset(args.dataset)
     n_trials = 16
     global t_idx
     t_idx = 0
@@ -72,7 +72,7 @@ def main():
         eval_freq = server_config['rounds']
         eval_results = train_model(
             model, test_batch, server_config, client_config, 
-            tasks_train, tasks_test, tasks_test_sizes,
+            tasks_train, tasks_test,
             train_run_dir, evals_run_dir, eval_freq, args.dataset
         )
         # Use args.batch to generate the noisy eval

@@ -6,9 +6,6 @@ import pickle as pkl
 import random
 import re
 import string
-import math
-from copy import deepcopy
-from collections import defaultdict
 from syslog import LOG_SYSLOG
 import numpy as np
 import torch; #torch.backends.cudnn.deterministic = False; 
@@ -191,7 +188,7 @@ def test_batch_text(model, X, Y, with_grad=False, with_err=True):
     return wrong, loss, counts.cpu(), errs.cpu()
 
 def train_model(model, test_batch, server_config, client_config, 
-                tasks_train, tasks_test, tasks_test_sizes,
+                tasks_train, tasks_test,
                 logdir_train, logdir_evals, eval_freq, dataset=None):
     model = model.cuda()
     writer = SummaryWriter(logdir_train)
@@ -245,7 +242,6 @@ def train_model(model, test_batch, server_config, client_config,
         flat_errs = torch.cat(result_objects['errs'])
         for p in [0.5, 1]:
             perm_eval_results = {'GlobalError': [], 'num_train': []}
-            # eval_perm = torch.load(f"data/{dataset}/eval_perm_p={p}.pt")
             eval_perm = np.load(f"data/{dataset}/eval_perm_p={p}.npy")
             perm_errs = flat_errs[eval_perm]
             perm_counts = flat_counts[eval_perm]
@@ -272,14 +268,14 @@ def load_dataset(dataset):
         raise Exception("invalid dataset")
     
     tasks_train, _ = load_tasks(f"data/{dataset}/train_clients.json")
-    tasks_test, tasks_test_sizes = load_tasks(f"data/{dataset}/eval_clients.json")
+    tasks_test, _ = load_tasks(f"data/{dataset}/eval_clients.json")
     for p in [0.5, 1]:
         eval_perm_pt = f"{DATA}/{dataset}/eval_perm_p={p}.npy"
         if not os.path.exists(eval_perm_pt):
             raise Exception(
                 f"File {eval_perm_pt} not found. Generate it using notebooks/generate_data.ipynb or download it from the Github repo."
             )
-    return test_batch, tasks_train, tasks_test, tasks_test_sizes
+    return test_batch, tasks_train, tasks_test
 
 def build_model(dataset):
     if "cifar10" in dataset:
@@ -334,14 +330,14 @@ def main():
     print('Using GPUs: ', os.environ["CUDA_VISIBLE_DEVICES"])
 
     # Set up data and model
-    test_batch, tasks_train, tasks_test, tasks_test_sizes = load_dataset(args.dataset)
+    test_batch, tasks_train, tasks_test = load_dataset(args.dataset)
     model = build_model(args.dataset)
 
     # Logging
     server_config = {k.split('_')[1]: v for k, v in vars(args).items() if k.startswith('server')}
-    server_config_str = "-".join(f"{k}_{v}" for k, v in server_config.items())
+    server_config_str = "-".join(f"{k}_{v:.4g}" if isinstance(v, float) else f"{k}_{v}" for k, v in server_config.items())
     client_config = {k.split('_')[1]: v for k, v in vars(args).items() if k.startswith('client')}
-    client_config_str = "-".join(f"{k}_{v:.4g}" for k, v in client_config.items())
+    client_config_str = "-".join(f"{k}_{v:.4g}" if isinstance(v, float) else f"{k}_{v}" for k, v in client_config.items())
     run_str = f"{args.dataset}-SEED-{args.seed}-SERVER-{server_config_str}-CLIENT-{client_config_str}"
     
     train_run_dir = os.path.join(args.parent_dir, "train", run_str)
@@ -354,7 +350,7 @@ def main():
     # Train
     train_model(
         model, test_batch, server_config, client_config, 
-        tasks_train, tasks_test, tasks_test_sizes,
+        tasks_train, tasks_test,
         train_run_dir, evals_run_dir, args.eval_freq, args.dataset
     )
 

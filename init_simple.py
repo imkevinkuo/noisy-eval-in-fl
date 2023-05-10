@@ -66,7 +66,6 @@ SERVER = lambda: {
     'server-beta1': np.random.uniform(low=0.0, high=0.9),
     'server-beta2': np.random.uniform(low=0.0, high=0.999), 
     'server-batch': 10,
-    'server-agg': 'weighted', # 'weighted' or 'unif'
 }
 
 CLIENT = lambda: {
@@ -85,11 +84,11 @@ args_keys = [
 
 args_dicts = []
 
-# datasets = "cifar10", "femnist", "stackoverflow", "reddit"
-# for dataset in datasets:
-for dataset in ["cifar10", "femnist"]: 
+# datasets = ["cifar10", "femnist", "stackoverflow", "reddit"]
+datasets = ["cifar10", "femnist"]
+for dataset in datasets:
     for agg in ['weighted', 'unif']:
-        for seed in range(256):
+        for seed in range(128):
             np.random.seed(seed)
             server_config = SERVER()
             client_config = CLIENT()

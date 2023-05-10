@@ -23,7 +23,7 @@ class FLWorker(Worker):
         self.sleep_interval = sleep_interval
         self.parent_dir = parent_dir
         self.dataset = dataset
-        self.test_batch, self.tasks_train, self.tasks_test, self.tasks_test_sizes = load_dataset(dataset)    
+        self.test_batch, self.tasks_train, self.tasks_test = load_dataset(dataset)    
         self.batch = batch
         self.eps = eps
 
@@ -38,6 +38,8 @@ class FLWorker(Worker):
         for k, v in config.items():
             if '_lr' in k:
                 config[k] = 10**v
+        # config['server_agg'] = 'weighted' if self.eps == -1 else 'unif'
+        config['server_agg'] = 'unif'
         
         server_config = {k.split('_')[1]: v for k, v in config.items() if k.startswith('server')}
         server_config_str = "-".join(f"{k}_{v}" for k, v in server_config.items())
@@ -101,7 +103,7 @@ class FLWorker(Worker):
             [8, 2], # 135, 405
             [15, 5, 1], # 45, 135, 405
             [34, 11, 3, 1], # 15, 45, 135, 405
-            [81, 27, 9, 3, 1] 
+            [81, 27, 9, 3, 1] # 5, 15, 45, 135, 405
         ]
         if budget_index == len(n_configs[bracket]) - 1:
         # last rung: select between all rounds trained to 405 = 10 configs
@@ -125,7 +127,7 @@ class FLWorker(Worker):
     def get_configspace():
         config_space = CS.ConfigurationSpace()
         config_space.add_hyperparameter(CS.CategoricalHyperparameter('server_optimizer', ["adam"]))
-        config_space.add_hyperparameter(CS.CategoricalHyperparameter('server_agg', ["weighted"]))
+        config_space.add_hyperparameter(CS.CategoricalHyperparameter('server_agg', [""])) # set inside worker init
         config_space.add_hyperparameter(CS.CategoricalHyperparameter('server_batch', [10]))
         config_space.add_hyperparameter(CS.UniformFloatHyperparameter('server_lr', lower=-6.0, upper=-1.0))
         config_space.add_hyperparameter(CS.UniformFloatHyperparameter('server_beta1', lower=0, upper=0.9))
