@@ -25,7 +25,7 @@ In a Linux terminal:
 
 ## Model Training
 
-Training uses either a weighted or uniform loss across clients. A uniform evaluation bounds individual client sensitivity, and therefore we analyze configurations trained on a uniformly weighted loss runs whenever differential privacy. However, in all other experiments, we weight the losses and evaluations by client size.
+Training uses either a weighted or uniform loss across clients. A uniform evaluation bounds individual client sensitivity, and therefore we use this evaluation metric in our differential privacy experiments. However, in all other experiments, we weight the losses and evaluations by client size.
 
 The main scripts are named `fedtrain_simple.py`, `fedtrain_tpe.py`, and `fedtrain_bohb.py`.
 
