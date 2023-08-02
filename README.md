@@ -25,8 +25,6 @@ In a Linux terminal:
 
 ## Model Training
 
-**We provide training logs for CIFAR10 and FEMNIST so artifact reviewers may test the analysis notebook without depending on the functionality of training. The file** `runs.tar.gz` **is included in the repository. Extract the contents with** `tar -xzvf runs.tar.gz`.
-
 Training uses either a weighted or uniform loss across clients. A uniform evaluation bounds individual client sensitivity, and therefore we analyze configurations trained on a uniformly weighted loss runs whenever differential privacy. However, in all other experiments, we weight the losses and evaluations by client size.
 
 The main scripts are named `fedtrain_simple.py`, `fedtrain_tpe.py`, and `fedtrain_bohb.py`.
